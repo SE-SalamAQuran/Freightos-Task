@@ -3,6 +3,9 @@ package vending;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class VendingMachineImpl implements VendingMachine {
   private Inventory<Coin> coinInventory = new Inventory<>();
@@ -24,31 +27,78 @@ public class VendingMachineImpl implements VendingMachine {
     for (Coin c : Coin.values()) {
       coinInventory.put(c, 5);
     }
+    for (Note n : Note.values()) {
+      noteInventory.put(n, 5);
+    }
     for (Item i : Item.values()) {
       itemInventory.put(i, 5);
     }
 
   }
 
+  public Item detectItem(String name) {
+    Item i = Item.CHETOS;
+    if (name.equals("C4")) {
+      return i;
+    } else if (name.equals("C3")) {
+      i = Item.MARS;
+    } else if (name.equals("C5")) {
+      i = Item.PRINGLES;
+    } else if (name.equals("C2")) {
+      i = Item.DORITOS;
+    } else if (name.equals("C1")) {
+      i = Item.SNICKERS;
+    }
+    return i;
+  }
+
   @Override
   public double selectItemAndGetPrice(Item item) {
     if (itemInventory.hasItem(item)) {
-      currentItem = item;
+      currentItem = detectItem(item.getName());
       return currentItem.getPrice();
     }
     throw new SoldOutException("Sold Out, Please buy another item");
   }
 
+  public Coin detectCoin(double amount) {
+    Coin c = Coin.TEN;
+    if (amount == 0.1) {
+      return c;
+    } else if (amount == 0.2) {
+      c = Coin.TWENTY;
+    } else if (amount == 0.5) {
+      c = Coin.FIFTY;
+    } else if (amount == 1) {
+      c = Coin.DOLLAR;
+    }
+    return c;
+  }
+
+  public Note detectNote(double amount) {
+    Note n = Note.TWENTY;
+    if (amount == 20) {
+      return n;
+    } else if (amount == 50) {
+      n = Note.FIFTY;
+    }
+    return n;
+  }
+
   @Override
   public void insertCoin(Coin coin) {
     currentBalance = currentBalance + coin.getDenomination();
-    coinInventory.add(coin);
+    coinInventory.add(detectCoin(coin.getDenomination()));
+  }
+
+  public double getCurrentBalance() {
+    return currentBalance;
   }
 
   @Override
   public void insertNote(Note note) {
     currentBalance = currentBalance + note.getDenomination();
-    noteInventory.add(note);
+    noteInventory.add(detectNote(note.getDenomination()));
   }
 
   @Override
@@ -129,10 +179,41 @@ public class VendingMachineImpl implements VendingMachine {
     return hasSufficientChangeForAmount(currentBalance - currentItem.getPrice());
   }
 
+  public void printItems() {
+    Map<Item, Integer> inv = itemInventory.getInv();
+    for (Item i : inv.keySet()) {
+      System.out.println(i + " Remaining: " + inv.get(i) + " Code: " + i.getName());
+
+    }
+  }
+
+  public void printCoins() {
+    Map<Coin, Integer> inv = coinInventory.getInv();
+    for (Coin c : inv.keySet()) {
+      System.out.println("Coins: " + c + " Remaining: " + inv.get(c));
+    }
+  }
+
   public void printStats() {
     System.out.println("Total Sales : " + totalSales);
-    System.out.println("Current Item Inventory : " + itemInventory);
-    System.out.println("Current Cash Inventory : " + coinInventory);
+    System.out.println("\nCurrent Item Inventory : \n");
+    printItems();
+    System.out.println("\nCurrent Cash Inventory : \n");
+    printCoins();
+  }
+
+  public Coin printList(List<Coin> list) {
+    Iterator<Coin> it = list.iterator();
+    return it.next();
+  }
+
+  public void printBucket() {
+    Bucket<Item, List<Coin>> bu = collectItemAndChange();
+    for (Item i : ((Map<Item, Integer>) bu).keySet()) {
+      System.out.println(i + "\n");
+      printList(bu.getSecond());
+    }
+
   }
 
   private List<Coin> getChange(double amount)
@@ -172,10 +253,6 @@ public class VendingMachineImpl implements VendingMachine {
     for (Coin c : change) {
       coinInventory.deduct(c);
     }
-  }
-
-  public double getTotalSales() {
-    return totalSales;
   }
 
 }

@@ -7,11 +7,9 @@ public class Card {
     private double balance;
 
     // Constructor
-    public Card(int serial, int cvv, String brand, double balance) {
-        this.brand = brand;
+    public Card(int serial, int cvv) {
         this.serial = serial;
         this.cvv = cvv;
-        this.balance = balance;
     }
 
     public void setBrand(String brand) {

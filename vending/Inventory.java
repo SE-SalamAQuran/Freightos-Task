@@ -34,4 +34,8 @@ public class Inventory<T> {
     public void put(T item, int quantity) {
         inv.put(item, quantity);
     }
+
+    public Map<T, Integer> getInv() {
+        return inv;
+    }
 }

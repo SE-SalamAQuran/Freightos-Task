@@ -12,4 +12,5 @@ public enum Coin {
     public double getDenomination() {
         return denomination;
     }
+
 }
