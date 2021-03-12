@@ -24,54 +24,59 @@ public class Main {
 
             int slot = scanner.nextInt();
             switch (slot) {
-                case 1:
-                    System.out.println("Please insert the amount: ");
-                    double amount = scanner.nextDouble();
-                    while (amount != -1) {
-                        amount = scanner.nextDouble();
-                        Coin c = ven.detectCoin(amount);
-                        ven.insertCoin(c);
-                    }
+            case 1:
+                System.out.println("Please insert the amount: ");
+                double amount = scanner.nextDouble();
+                while (amount != -1) {
+                    amount = scanner.nextDouble();
+                    Coin c = ven.detectCoin(amount);
+                    ven.insertCoin(c);
+                }
 
-                    System.out.println("Current balance: " + ven.getCurrentBalance());
-                    System.out.println("Enter the product code: ");
-                    String buyCode = scanner.next(); // product code
-                    Item item = ven.detectItem(buyCode);
-                    System.out.println(ven.collectItemAndChange());
-                    break;
+                System.out.println("Current balance: " + ven.getCurrentBalance());
+                System.out.println("Enter the product code: ");
+                String buyCode = scanner.next(); // product code
+                Item item1 = ven.detectItem(buyCode);
+                System.out.println("You bought: " + item1.name() + " For: " + item1.getPrice() + "\n");
+                System.out.println("Your change: " + "\n");
+                ven.printList(ven.collectItemAndChange().getSecond());
+                break;
 
-                case 2:
-                    System.out.println("Please insert the amount: ");
-                    double note = scanner.nextDouble();
+            case 2:
+                System.out.println("Please insert the amount: ");
+                double note = scanner.nextDouble();
 
-                    Note n = ven.detectNote(note);
-                    ven.insertNote(n);
-                    System.out.println("Current balance: " + ven.getCurrentBalance());
-                    System.out.println("Enter the product code: ");
-                    String code2 = scanner.next(); // product code
-                    Item item2 = ven.detectItem(code2);
-                    System.out.println(ven.collectItemAndChange());
+                Note n = ven.detectNote(note);
+                ven.insertNote(n);
+                System.out.println("Current balance: " + ven.getCurrentBalance());
+                System.out.println("Enter the product code: ");
+                String code2 = scanner.next(); // product code
+                Item item2 = ven.detectItem(code2);
+                System.out.println("You bought: " + item2.name() + " For: " + item2.getPrice() + "\n");
+                System.out.println("Your change: " + "\n");
+                ven.printList(ven.collectItemAndChange().getSecond());
+                break;
 
-                    break;
+            case 3:
+                System.out.println("Please insert the card serial: ");
+                int serial = scanner.nextInt();
+                System.out.println("Please insert the card cvv: ");
+                int cvv = scanner.nextInt();
 
-                case 3:
-                    System.out.println("Please insert the card serial: ");
-                    int serial = scanner.nextInt();
-                    System.out.println("Please insert the card cvv: ");
-                    int cvv = scanner.nextInt();
+                Card card = new Card(serial, cvv);
 
-                    Card card = new Card(serial, cvv);
+                ven.insertCard(card);
 
-                    ven.insertCard(card);
-
-                    System.out.println("Current balance: " + ven.getCurrentBalance());
-                    System.out.println("Enter the product code: ");
-                    String code3 = scanner.next(); // product code
-                    Item item3 = ven.detectItem(code3);
-                    System.out.println(ven.collectItemAndChange());
-                    break;
-                default:
-                    System.out.println("Please enter a valid input");
+                System.out.println("Current balance: " + ven.getCurrentBalance());
+                System.out.println("Enter the product code: ");
+                String code3 = scanner.next(); // product code
+                Item item3 = ven.detectItem(code3);
+                System.out.println("You bought: " + item3.name() + " For: " + item3.getPrice() + "\n");
+                System.out.println("Your change: " + "\n");
+                ven.printList(ven.collectItemAndChange().getSecond());
+                break;
+            default:
+                System.out.println("Please enter a valid input");
             }
 
         } catch (IllegalStateException | NoSuchElementException e) {

@@ -131,6 +131,7 @@ public class VendingMachineImpl implements VendingMachine {
     List<Coin> change = collectChange();
 
     return new Bucket<Item, List<Coin>>(item, change);
+
   }
 
   @Override
@@ -202,17 +203,13 @@ public class VendingMachineImpl implements VendingMachine {
     printCoins();
   }
 
-  public Coin printList(List<Coin> list) {
+  public void printList(List<Coin> list) {
+    double sumOfChange = 0;
     Iterator<Coin> it = list.iterator();
-    return it.next();
-  }
-
-  public void printBucket() {
-    Bucket<Item, List<Coin>> bu = collectItemAndChange();
-    for (Item i : ((Map<Item, Integer>) bu).keySet()) {
-      System.out.println(i + "\n");
-      printList(bu.getSecond());
+    while (it.hasNext()) {
+      sumOfChange += it.next().getDenomination();
     }
+    System.out.println(sumOfChange);
 
   }
 
